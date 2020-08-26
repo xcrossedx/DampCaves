@@ -14,13 +14,17 @@ namespace DampCaves
         public int health = 10;
 
         public int damage = 1;
-        public int range = 10;
-        public int spread = 1;
+        public int range = 5;
+        public int spread = 16;
         public int fireRate = 0;
         public int piercing = 0;
         public int trail = 0;
 
+        public int alignment = 0;
+
         public int[] powerUpCounter = new int[6];
+
+        public Ticker fireDelay = new Ticker();
 
         public Entity(int id)
         {
@@ -36,6 +40,7 @@ namespace DampCaves
                 gameObject = new GameObject(1, pos, "  ", 4, 0);
 
                 health = 1;
+                alignment = 1;
             }
         }
 
@@ -156,6 +161,17 @@ namespace DampCaves
                 }
             }
             if (spread > 16) { spread = 16; }
+        }
+
+        public void Fire()
+        {
+            if (fireDelay.Check(0.5f - (0.05f * fireRate)))
+            {
+                for (int s = 1; s <= spread; s++)
+                {
+                    damagers.Add(new Damager(0, s, this));
+                }
+            }
         }
     }
 }
